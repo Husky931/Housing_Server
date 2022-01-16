@@ -1,14 +1,19 @@
 const express = require("express")
 const dotenv = require("dotenv")
-dotenv.config()
 const mongoose = require("mongoose")
 
 const User = require("./model/user")
 
+const listings = require("./routes/listings")
+
+dotenv.config()
+
 mongoose
-    .connect("mongodb://localhost:27017/housing_app")
+    .connect("mongodb://localhost:27017/test")
     .then(() => {
         const app = express()
+
+        app.use("/listings", listings)
 
         app.get("/", (req, res) => {
             res.sendStatus(200)
@@ -17,49 +22,6 @@ mongoose
         app.get("/test", async (req, res) => {
             const user = await User.find()
             res.send({ data: user })
-        })
-
-        app.get("/listings", (req, res) => {
-            res.status(200).json({
-                success: true,
-                data: "Receive array of all apartment",
-            })
-        })
-
-        app.get("/listings", (req, res) => {
-            res.status(200).json({
-                success: true,
-                data: "Receive array of all apartment",
-            })
-        })
-        app.get("/listings/:id", (req, res) => {
-            res.status(200).json({
-                success: true,
-                data: "Receive this apartment",
-            })
-        })
-
-        app.post("/listings", (req, res) => {
-            res.status(200).json({
-                success: true,
-                data: "Create new apartment",
-            })
-        })
-
-        app.put("/listings/:id", (req, res) => {
-            res.status(200).json({
-                success: true,
-                number: req.params.id,
-                data: "Update apartment",
-            })
-        })
-
-        app.delete("/listings/:id", (req, res) => {
-            res.status(200).json({
-                success: true,
-                number: req.params.id,
-                data: "Delete this apartment",
-            })
         })
 
         app.post("/login", (req, res) => {
@@ -86,10 +48,6 @@ mongoose
                     console.log(err)
                 })
             })
-            // res.status(200).json({
-            //     success: true,
-            //     data: "Register user",
-            // })
         })
 
         app.post("/register")
